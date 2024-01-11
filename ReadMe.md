@@ -1,7 +1,3 @@
-Certainly! Here's a sample GitHub repo description for your Node Express MongoDB backend for a YouTube application:
-
----
-
 # YouTube Clone Backend
 
 This repository contains the backend implementation for a YouTube application clone built using Node.js, Express, and MongoDB. The backend provides the necessary APIs and data storage to support the core functionalities of a video-sharing platform.
