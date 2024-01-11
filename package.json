@@ -3,9 +3,18 @@
   "version": "1.0.0",
   "description": "Designing the backend of youtube",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon ./src/index.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^8.0.4",
+    "nodemon": "^3.0.2"
+  },
+  "devDependencies": {
+    "prettier": "^3.1.1"
+  }
 }
