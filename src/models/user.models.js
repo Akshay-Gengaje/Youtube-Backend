@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
@@ -52,7 +52,7 @@ const userSchema = new mongoose.Schema(
 // Don't use here arrow functions because they don't have access to the this keyword.
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
-    this.password = bcrypt.hash(this.password, 10);
+    this.password = await bcrypt.hash(this.password, 10);
   }
   next();
 });
@@ -85,4 +85,5 @@ userSchema.methods.generateAccessToken = function () {
     { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
   );
 };
+
 export const User = new mongoose.model("User", userSchema);
