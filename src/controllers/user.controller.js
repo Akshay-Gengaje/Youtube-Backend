@@ -3,17 +3,17 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.models.js";
 import { uploadOnCloudinay } from "../utils/cloudinary.js";
+import ApiResponse from "../utils/ApiResponse.js";
+// 1. Get user details from frontend
+// 2. Validation - not empty
+// 3. Check if user is already registered - username and email
+// 4. Check for images and avatar
+// 5. upload them cloudinary
+// 6. Create user object - create entry in db
+// 7. remove password and refresh token field from response
+// 8. check for user creation
+// 9. return response
 const registerUser = asyncHandler(async (req, res) => {
-  // 1. Get user details from frontend
-  // 2. Validation - not empty
-  // 3. Check if user is already registered - username and email
-  // 4. Check for images and avatar
-  // 5. upload them cloudinary
-  // 6. Create user object - create entry in db
-  // 7. remove password and refresh token field from response
-  // 8. check for user creation
-  // 9. return response
-
   const { fullName, userName, email, password } = req.body;
   if (
     [fullName, userName, email, password].some((field) => field?.trim() === "")
@@ -21,7 +21,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Please fill all the fields");
   }
 
-  const existedUser = User.findOne({
+  const existedUser = await User.findOne({
     $or: [{ userName }, { email }],
   });
 
@@ -29,8 +29,15 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "User already exists");
   }
   const avatarLocalPath = req.files?.avatar[0]?.path;
-  const coverImageLocalPath = req.files?.cover[0]?.path;
-
+  // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+  let coverImageLocalPath;
+  if (
+    req.files &&
+    Array.isArray(req.files.coverImage) &&
+    req.files.coverImage.length > 0
+  ) {
+    coverImageLocalPath = req.files.coverImage[0].path;
+  }
   if (!avatarLocalPath) {
     throw new ApiError(400, "Please upload an avatar");
   }
